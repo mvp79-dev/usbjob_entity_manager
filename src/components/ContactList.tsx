@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Phone, Mail } from 'lucide-react';
 import axios from 'axios';
 import qs from 'qs';
+import ContactForm from './ContactForm';
 
 interface Contact {
   contact_id: number;
@@ -32,8 +33,12 @@ const ContactList: React.FC<ContactListProps> = ({ entityId }) => {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       });
-      console.log(response);
-      setContacts(response.data.data);
+      if (response.data.data != 'No contacts found.') {
+        setContacts(response.data.data);
+      } else {
+        setContacts([]);
+      }
+      console.log(contacts);
     } catch (error) {
       console.log('ajax call error:', error);
     }
@@ -67,6 +72,10 @@ const ContactList: React.FC<ContactListProps> = ({ entityId }) => {
     console.log('Delete contact:', contactId);
   };
 
+  const handleCancel = () => {
+    setIsAddingContact(false);
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
@@ -81,7 +90,7 @@ const ContactList: React.FC<ContactListProps> = ({ entityId }) => {
       </div>
 
       <div className="space-y-4">
-        {contacts.map((contact) => (
+        {contacts && contacts.map((contact) => (
           <div
             key={contact.contact_id}
             className="bg-gray-50 rounded-lg p-4 flex justify-between items-start"
@@ -116,6 +125,18 @@ const ContactList: React.FC<ContactListProps> = ({ entityId }) => {
           </div>
         ))}
       </div>
+
+      {isAddingContact && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+            <ContactForm
+              onSubmit={() => console.log('Submit')}
+              onCancel={handleCancel}
+              isEdit={false}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
