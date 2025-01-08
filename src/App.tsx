@@ -70,6 +70,7 @@ function App() {
                 <EntityDetails 
                   entityId={selectedEntityId}
                   entity={entities.find(e => e.entity_id === selectedEntityId)}
+                  reloadFunc={getAllEntities}
                 />
               ) : (
                 <div className="bg-white shadow rounded-lg p-6 text-center text-gray-500">

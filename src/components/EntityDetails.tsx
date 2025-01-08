@@ -3,13 +3,16 @@ import { Users, MapPin, Briefcase, Edit2, Check, X } from 'lucide-react';
 import ContactList from './ContactList';
 import AddressList from './AddressList';
 import JobList from './JobList';
+import qs from 'qs';
+import axios from 'axios';
 
 interface EntityDetailsProps {
   entityId: number;
   entity: any;
+  reloadFunc:()=>void;
 }
 
-const EntityDetails: React.FC<EntityDetailsProps> = ({ entityId, entity }) => {
+const EntityDetails: React.FC<EntityDetailsProps> = ({ entityId, entity, reloadFunc }) => {
   const [activeTab, setActiveTab] = useState('contacts');
   const [isEditing, setIsEditing] = useState(false);
   const [editedName, setEditedName] = useState(entity.entity_name);
@@ -22,26 +25,24 @@ const EntityDetails: React.FC<EntityDetailsProps> = ({ entityId, entity }) => {
   ];
 
   const handleSave = async () => {
-    try {
-      // TODO: Implement API call to update entity
-      const response = await fetch('/api/entities/update', {
-        method: 'POST',
+    const data = {
+      mode:'editEntity',
+      entity_id:entityId,
+      entity_name: editedName,
+      entity_type: editedType
+    }
+    const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+    try{
+      const response = await axios.post(baseUrl + '/j/inc/class/class.entities.php', qs.stringify(data), {
         headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          entity_id: entityId,
-          entity_name: editedName,
-          entity_type: editedType
-        }),
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
       });
-
-      if (response.ok) {
-        setIsEditing(false);
-        // Update local state or trigger refresh
-      }
+      console.log(response);
+      setIsEditing(false);
+      reloadFunc();
     } catch (error) {
-      console.error('Error updating entity:', error);
+      console.log('ajax call error:', error);
     }
   };
 
