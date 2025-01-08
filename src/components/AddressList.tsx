@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, MapPin } from 'lucide-react';
+import axios from 'axios';
+import qs from 'qs';
 
 interface Address {
   address_id: number;
@@ -18,19 +20,43 @@ const AddressList: React.FC<AddressListProps> = ({ entityId }) => {
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [isAddingAddress, setIsAddingAddress] = useState(false);
 
+  const getAllAddresses = async() => {
+    const data = {
+      mode:'getaddress',
+      entities_id:entityId
+    }
+    const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+    try{
+      const response = await axios.post(baseUrl + '/j/inc/class/class.addresses.php', qs.stringify(data), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      console.log(response);
+      if (response.data.data != 'No addresses found.') {
+        setAddresses(response.data.data);
+      } else {
+        setAddresses([]);
+      }
+    } catch (error) {
+      console.log('ajax call error:', error);
+    }
+  }
+
   // Mock data for initial development
   useEffect(() => {
-    const mockAddresses = [
-      {
-        address_id: 1,
-        address_street1: "123 Main St",
-        address_city: "Anytown",
-        address_state: "CA",
-        address_code: "12345",
-        enabled: true
-      }
-    ];
-    setAddresses(mockAddresses);
+    getAllAddresses();
+    // const mockAddresses = [
+    //   {
+    //     address_id: 1,
+    //     address_street1: "123 Main St",
+    //     address_city: "Anytown",
+    //     address_state: "CA",
+    //     address_code: "12345",
+    //     enabled: true
+    //   }
+    // ];
+    // setAddresses(mockAddresses);
   }, [entityId]);
 
   const handleAddAddress = () => {
@@ -56,7 +82,7 @@ const AddressList: React.FC<AddressListProps> = ({ entityId }) => {
       </div>
 
       <div className="space-y-4">
-        {addresses.map((address) => (
+        {addresses && addresses.map((address) => (
           <div
             key={address.address_id}
             className="bg-gray-50 rounded-lg p-4 flex justify-between items-start"
