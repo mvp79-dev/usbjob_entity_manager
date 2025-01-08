@@ -70,6 +70,22 @@ const ContactList: React.FC<ContactListProps> = ({ entityId }) => {
   const handleDeleteContact = async (contactId: number) => {
     // Implement delete functionality
     console.log('Delete contact:', contactId);
+    const data = {
+      mode:'delete',
+      contact_id:contactId,
+    }
+    const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+    try{
+      const response = await axios.post(baseUrl + '/j/inc/class/class.contacts.php', qs.stringify(data), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      console.log(response);
+      getAllContacts();
+    } catch (error) {
+      console.log('ajax call error:', error);
+    }
   };
 
   const handleCancel = () => {
@@ -96,6 +112,7 @@ const ContactList: React.FC<ContactListProps> = ({ entityId }) => {
       });
       console.log(response);
       setIsAddingContact(false);
+      getAllContacts();
     } catch (error) {
       console.log('ajax call error:', error);
     }
@@ -121,6 +138,7 @@ const ContactList: React.FC<ContactListProps> = ({ entityId }) => {
       });
       console.log(response);
       setEditingContact(null);
+      getAllContacts();
     } catch (error) {
       console.log('ajax call error:', error);
     }
