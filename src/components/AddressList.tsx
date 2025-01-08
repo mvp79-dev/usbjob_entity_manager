@@ -67,6 +67,23 @@ const AddressList: React.FC<AddressListProps> = ({ entityId }) => {
   const handleDeleteAddress = async (addressId: number) => {
     // Implement delete functionality
     console.log('Delete address:', addressId);
+
+    const data = {
+      mode:'delete',
+      address_id:addressId,
+    }
+    const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+    try{
+      const response = await axios.post(baseUrl + '/j/inc/class/class.addresses.php', qs.stringify(data), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      console.log(response);
+      getAllAddresses();
+    } catch (error) {
+      console.log('ajax call error:', error);
+    }
   };
 
   const handleCancel = () => {
