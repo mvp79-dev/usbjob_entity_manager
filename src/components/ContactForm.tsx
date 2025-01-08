@@ -9,16 +9,24 @@ interface ContactFormProps {
 }
 
 const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onCancel, initialData, isEdit }) => {
+  const checkAccessStatus = (contact_acl: string, position: number): boolean => {
+    if (position < 0 || position >= contact_acl.length) {
+      return false; // Out of bounds
+    }
+    return contact_acl[position] > '0'; // Check if the character at the position is greater than '0'
+  };
+  
+
   const [formData, setFormData] = useState({
     contact_name: initialData?.contact_name || '',
     email: initialData?.emails?.split(',') || [''],
     phone_number: initialData?.phone_numbers?.split(',') || [''],
     contact_acl: initialData?.contact_acl || 0,
-    admin: Boolean(initialData?.contact_acl & 10000),
-    billing: Boolean(initialData?.contact_acl & 1000),
-    shipping: Boolean(initialData?.contact_acl & 100),
-    artwork: Boolean(initialData?.contact_acl & 10),
-    data: Boolean(initialData?.contact_acl & 1)
+    admin: checkAccessStatus(initialData?.contact_acl, 0),
+    billing: checkAccessStatus(initialData?.contact_acl, 1),
+    shipping: checkAccessStatus(initialData?.contact_acl, 2),
+    artwork: checkAccessStatus(initialData?.contact_acl, 3),
+    data: checkAccessStatus(initialData?.contact_acl, 4)
   });
 
   const handleSubmit = (e: React.FormEvent) => {

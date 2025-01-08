@@ -74,7 +74,57 @@ const ContactList: React.FC<ContactListProps> = ({ entityId }) => {
 
   const handleCancel = () => {
     setIsAddingContact(false);
+    setEditingContact(null);
   };
+
+  const handleSubmit = async(dataParam:any) => {
+    const data = {
+      mode:'insert',
+      entities_id:entityId,
+      contact_name:dataParam.contact_name,
+      contact_acl:dataParam.contact_acl,
+      email:dataParam.email,
+      phone_types_id:dataParam.phone_types_id,
+      phone_number:dataParam.phone_number
+    }
+    const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+    try{
+      const response = await axios.post(baseUrl + '/j/inc/class/class.contacts.php', qs.stringify(data), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      console.log(response);
+      setIsAddingContact(false);
+    } catch (error) {
+      console.log('ajax call error:', error);
+    }
+  }
+
+  const handleSubmit2Edit = async(dataParam:any) => {
+    const data = {
+      mode:'edit',
+      entities_id:entityId,
+      contacts_id:editingContact?.contact_id,
+      contact_name:dataParam.contact_name,
+      contact_acl:dataParam.contact_acl,
+      email:dataParam.email,
+      phone_types_id:dataParam.phone_types_id,
+      phone_number:dataParam.phone_number
+    }
+    const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+    try{
+      const response = await axios.post(baseUrl + '/j/inc/class/class.contacts.php', qs.stringify(data), {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+      console.log(response);
+      setEditingContact(null);
+    } catch (error) {
+      console.log('ajax call error:', error);
+    }
+  }
 
   return (
     <div>
@@ -91,38 +141,40 @@ const ContactList: React.FC<ContactListProps> = ({ entityId }) => {
 
       <div className="space-y-4">
         {contacts && contacts.map((contact) => (
-          <div
-            key={contact.contact_id}
-            className="bg-gray-50 rounded-lg p-4 flex justify-between items-start"
-          >
-            <div>
-              <h4 className="font-medium">{contact.contact_name}</h4>
-              <div className="mt-1 space-y-1">
-                <div className="flex items-center text-sm text-gray-500">
-                  <Mail className="h-4 w-4 mr-2" />
-                  {contact.emails}
-                </div>
-                <div className="flex items-center text-sm text-gray-500">
-                  <Phone className="h-4 w-4 mr-2" />
-                  {contact.phone_numbers}
+          <>
+            <div
+              key={contact.contact_id}
+              className="bg-gray-50 rounded-lg p-4 flex justify-between items-start"
+            >
+              <div>
+                <h4 className="font-medium">{contact.contact_name}</h4>
+                <div className="mt-1 space-y-1">
+                  <div className="flex items-center text-sm text-gray-500">
+                    <Mail className="h-4 w-4 mr-2" />
+                    {contact.emails}
+                  </div>
+                  <div className="flex items-center text-sm text-gray-500">
+                    <Phone className="h-4 w-4 mr-2" />
+                    {contact.phone_numbers}
+                  </div>
                 </div>
               </div>
+              <div className="flex space-x-2">
+                <button
+                  onClick={() => handleEditContact(contact)}
+                  className="text-gray-400 hover:text-gray-500"
+                >
+                  <Edit2 className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => handleDeleteContact(contact.contact_id)}
+                  className="text-gray-400 hover:text-red-500"
+                >
+                  <Trash2 className="h-5 w-5" />
+                </button>
+              </div>
             </div>
-            <div className="flex space-x-2">
-              <button
-                onClick={() => handleEditContact(contact)}
-                className="text-gray-400 hover:text-gray-500"
-              >
-                <Edit2 className="h-5 w-5" />
-              </button>
-              <button
-                onClick={() => handleDeleteContact(contact.contact_id)}
-                className="text-gray-400 hover:text-red-500"
-              >
-                <Trash2 className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
+          </>
         ))}
       </div>
 
@@ -130,9 +182,22 @@ const ContactList: React.FC<ContactListProps> = ({ entityId }) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
           <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
             <ContactForm
-              onSubmit={() => console.log('Submit')}
+              onSubmit={handleSubmit}
               onCancel={handleCancel}
               isEdit={false}
+            />
+          </div>
+        </div>
+      )}
+
+      {editingContact && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
+            <ContactForm
+              onSubmit={handleSubmit2Edit}
+              onCancel={handleCancel}
+              initialData={editingContact}
+              isEdit={true}
             />
           </div>
         </div>
