@@ -45,7 +45,7 @@ const EntityList: React.FC<EntityListProps> = ({ entities, selectedEntityId, onS
             <Building2 className="h-5 w-5 text-gray-400 mr-3" />
             <div className="text-left">
               <div className="font-medium">{entity.entity_name}</div>
-              <div className="text-sm text-gray-500">Type: {entity.entity_type}</div>
+              <div className="text-sm text-gray-500">{entity.entity_type == 1 ? 'Customer' :(entity.entity_type == 2 ? 'Vendor' : 'Admin')}</div>
             </div>
           </button>
         ))}

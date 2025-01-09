@@ -19,9 +19,9 @@ const EntityDetails: React.FC<EntityDetailsProps> = ({ entityId, entity, reloadF
   const [editedType, setEditedType] = useState(entity.entity_type);
 
   const entityTypes = [
-    { id: 1, name: "Type 1" },
-    { id: 2, name: "Type 2" },
-    { id: 5, name: "Type 5" }
+    { id: 1, name: "Customer" },
+    { id: 2, name: "Vendor" },
+    // { id: 5, name: "Type 5" }
   ];
 
   const handleSave = async () => {
@@ -80,7 +80,7 @@ const EntityDetails: React.FC<EntityDetailsProps> = ({ entityId, entity, reloadF
                 >
                   {entityTypes.map(type => (
                     <option key={type.id} value={type.id}>
-                      Type {type.id}
+                      {type.name}
                     </option>
                   ))}
                 </select>
@@ -96,7 +96,7 @@ const EntityDetails: React.FC<EntityDetailsProps> = ({ entityId, entity, reloadF
                     <Edit2 className="h-4 w-4" />
                   </button>
                 </div>
-                <p className="text-sm text-gray-500">Type: {entity.entity_type}</p>
+                <p className="text-sm text-gray-500">{entity.entity_type == 1 ? 'Customer' :(entity.entity_type == 2 ? 'Vendor' : 'Admin')}</p>
               </div>
             )}
           </div>
