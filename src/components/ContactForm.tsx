@@ -10,6 +10,9 @@ interface ContactFormProps {
 
 const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onCancel, initialData, isEdit }) => {
   const checkAccessStatus = (contact_acl: string, position: number): boolean => {
+    if (!contact_acl) {
+      return false;
+    }
     if (position < 0 || position >= contact_acl.length) {
       return false; // Out of bounds
     }
