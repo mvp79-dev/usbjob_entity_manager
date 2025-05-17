@@ -14,6 +14,7 @@ function App() {
       mode:'getAllEntities'
     }
     const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+    // const baseUrl = 'https://everyusb.io';
     try{
       const response = await axios.post(baseUrl + '/j/inc/class/class.entities.php', qs.stringify(data), {
         headers: {

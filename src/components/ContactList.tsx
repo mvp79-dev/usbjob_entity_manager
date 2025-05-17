@@ -27,6 +27,7 @@ const ContactList: React.FC<ContactListProps> = ({ entityId }) => {
       entities_id:entityId
     }
     const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+    // const baseUrl = 'https://everyusb.io';
     try{
       const response = await axios.post(baseUrl + '/j/inc/class/class.contacts.php', qs.stringify(data), {
         headers: {
@@ -75,6 +76,7 @@ const ContactList: React.FC<ContactListProps> = ({ entityId }) => {
       contact_id:contactId,
     }
     const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+    // const baseUrl = 'https://everyusb.io';
     try{
       const response = await axios.post(baseUrl + '/j/inc/class/class.contacts.php', qs.stringify(data), {
         headers: {
@@ -101,9 +103,13 @@ const ContactList: React.FC<ContactListProps> = ({ entityId }) => {
       contact_acl:dataParam.contact_acl,
       email:dataParam.email,
       phone_types_id:dataParam.phone_types_id,
-      phone_number:dataParam.phone_number
+      phone_number:dataParam.phone_number,
+      primary:dataParam.primary
     }
+
+    console.log("data", data);
     const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+    // const baseUrl = 'https://everyusb.io';
     try{
       const response = await axios.post(baseUrl + '/j/inc/class/class.contacts.php', qs.stringify(data), {
         headers: {
@@ -127,9 +133,11 @@ const ContactList: React.FC<ContactListProps> = ({ entityId }) => {
       contact_acl:dataParam.contact_acl,
       email:dataParam.email,
       phone_types_id:dataParam.phone_types_id,
-      phone_number:dataParam.phone_number
+      phone_number:dataParam.phone_number,
+      primary:dataParam.primary
     }
     const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+    // const baseUrl = 'https://everyusb.io';
     try{
       const response = await axios.post(baseUrl + '/j/inc/class/class.contacts.php', qs.stringify(data), {
         headers: {

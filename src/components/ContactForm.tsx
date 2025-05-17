@@ -29,22 +29,26 @@ const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onCancel, initialDa
     billing: checkAccessStatus(initialData?.contact_acl, 1),
     shipping: checkAccessStatus(initialData?.contact_acl, 2),
     artwork: checkAccessStatus(initialData?.contact_acl, 3),
-    data: checkAccessStatus(initialData?.contact_acl, 4)
+    data: checkAccessStatus(initialData?.contact_acl, 4),
+    primary: initialData?.primary || false
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     let contact_acl = 0;
+    let primary = false;
     if (formData.admin) contact_acl |= 10000;
     if (formData.billing) contact_acl |= 1000;
     if (formData.shipping) contact_acl |= 100;
     if (formData.artwork) contact_acl |= 10;
     if (formData.data) contact_acl |= 1;
+    if (formData.primary) primary = true;
 
     onSubmit({
       ...formData,
       contact_acl,
-      phone_types_id: 2 // Default work type as per API
+      phone_types_id: 2,
+      primary
     });
   };
 
@@ -152,7 +156,8 @@ const ContactForm: React.FC<ContactFormProps> = ({ onSubmit, onCancel, initialDa
             { key: 'billing', label: 'Billing', value: 1000 },
             { key: 'shipping', label: 'Shipping', value: 100 },
             { key: 'artwork', label: 'Artwork', value: 10 },
-            { key: 'data', label: 'Data', value: 1 }
+            { key: 'data', label: 'Data', value: 1 },
+            { key: 'primary', label: 'Primary', value: 1 }
           ].map(({ key, label }) => (
             <div key={key} className="flex items-center">
               <input

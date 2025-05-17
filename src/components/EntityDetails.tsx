@@ -32,6 +32,7 @@ const EntityDetails: React.FC<EntityDetailsProps> = ({ entityId, entity, reloadF
       entity_type: editedType
     }
     const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+    // const baseUrl = 'https://everyusb.io';
     try{
       const response = await axios.post(baseUrl + '/j/inc/class/class.entities.php', qs.stringify(data), {
         headers: {

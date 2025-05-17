@@ -27,6 +27,7 @@ const AddressList: React.FC<AddressListProps> = ({ entityId }) => {
       entities_id:entityId
     }
     const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+    // const baseUrl = 'https://everyusb.io';
     try{
       const response = await axios.post(baseUrl + '/j/inc/class/class.addresses.php', qs.stringify(data), {
         headers: {
@@ -73,6 +74,7 @@ const AddressList: React.FC<AddressListProps> = ({ entityId }) => {
       address_id:addressId,
     }
     const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+    // const baseUrl = 'https://everyusb.io';
     try{
       const response = await axios.post(baseUrl + '/j/inc/class/class.addresses.php', qs.stringify(data), {
         headers: {
@@ -103,6 +105,7 @@ const AddressList: React.FC<AddressListProps> = ({ entityId }) => {
       address_country:dataParam.address_country
     }
     const baseUrl = `${window.location.protocol}//${window.location.host}/`;
+    // const baseUrl = 'https://everyusb.io';
     try{
       const response = await axios.post(baseUrl + '/j/inc/class/class.addresses.php', qs.stringify(data), {
         headers: {
